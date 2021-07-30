@@ -1,0 +1,114 @@
+
+
+\newcommand{\x}{\mathbf{x}}
+\newcommand{\w}{\mathbf{w}}
+\renewcommand{\u}{\mathbf{u}}
+\renewcommand{\r}{\mathbf{r}}
+\renewcommand{\v}{\mathbf{v}}
+\renewcommand{\aa}{\mathbf{a}}
+\newcommand{\y}{\mathbf{y}}
+\newcommand{\HH}{\mathbf{H}^\infty}
+%\newcommand{\KK}{K^\infty}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\matZ}{\mathbf{Z}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\F}{\mathcal{F}}
+\renewcommand{\S}{\mathbb{S}}
+\newcommand{\W}{\mathbf{W}}
+\renewcommand{\P}{\mathbf{P}}
+\newcommand{\f}{\mathbf{f}}
+\newcommand{\I}{\mathbf{I}}
+\newcommand{\K}{\mathbf{K}}
+
+\DeclareMathOperator*{\E}{\mathbb{E}}
+
+\usepackage{xcolor}
+\newcommand{\lnote}[1]{\textcolor{magenta}{Liu: #1}}
+\newcommand{\anote}[1]{\textcolor{teal}{Aparna: #1}}
+
+
+% \newcommand{\rmnote}[1]{\textcolor{magenta}{#1}}
+\newcommand{\ignore}[1]{}
+
+% Theorem definitions in the amsthm standard
+\newtheorem{thm}{Theorem}
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{sublem}[thm]{Sublemma}
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem{proposition}[thm]{Proposition}
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{conc}[thm]{Conclusion}
+\newtheorem{conj}[thm]{Conjecture}
+\newtheorem{defn}[thm]{Definition}
+\newtheorem{cond}[thm]{Condition}
+\newtheorem{asm}[thm]{Assumption}
+\newtheorem{ntn}[thm]{Notation}
+\newtheorem{prob}[thm]{Problem}
+\theoremstyle{remark}
+\newtheorem{rmk}[thm]{Remark}
+\newtheorem{eg}[thm]{Example}
+\newtheorem*{hint}{Hint}
+
+%% Mathmode shortcuts
+% Number sets
+\newcommand{\NN}{\mathbb N}              % The set of naturals
+\newcommand{\NNzero}{\NN_0}              % The set of naturals including zero
+\newcommand{\NNone}{\NN}                 % The set of naturals excluding zero
+\newcommand{\ZZ}{\mathbb Z}              % The set of integers
+\newcommand{\QQ}{\mathbb Q}              % The set of rationals
+\newcommand{\RR}{\mathbb R}              % The set of reals
+\newcommand{\CC}{\mathbb C}              % The set of complex numbers
+\newcommand{\KK}{\mathbb K}              % An arbitrary field
+% Modern typesetting for the real and imaginary parts of a complex number
+\renewcommand{\Re}{\operatorname*{Re}} \renewcommand{\Im}{\operatorname*{Im}}
+% Upright d for derivatives
+\newcommand{\D}{\ensuremath{\,\mathrm{d}}}
+% Upright i for imaginary unit
+\newcommand{\ri}{\ensuremath{\mathrm{i}}}
+% Upright e for exponentials
+\newcommand{\re}{\ensuremath{\mathrm{e}}}
+% abbreviation for \lambda
+\newcommand{\la}{\ensuremath{\lambda}}
+% Make epsilons look more different from the element symbol
+\renewcommand{\epsilon}{\varepsilon}
+% Always use slanted forms of \leq, \geq
+\renewcommand{\geq}{\geqslant}
+\renewcommand{\leq}{\leqslant}
+% Shorthand for "if and only if" symbol
+\newcommand{\Iff}{\ensuremath{\Leftrightarrow}}
+% Make bold symbols for vectors
+\providecommand{\BVec}[1]{\mathbf{#1}}
+% Hyperbolic functions
+\providecommand{\sech}{\operatorname{sech}}
+\providecommand{\csch}{\operatorname{csch}}
+\providecommand{\ctnh}{\operatorname{ctnh}}
+% sinc function
+\providecommand{\sinc}{\operatorname{sinc}}
+% closure of a set
+\providecommand{\clos}{\operatorname{clos}}
+
+% Make really wide hat for Fourier transforms applied to large functions
+\usepackage{scalerel}
+\usepackage{stackengine}
+\stackMath
+\newcommand\reallywidecheck[1]{%
+\savestack{\tmpbox}{\stretchto{%
+  \scaleto{%
+    \scalerel*[\widthof{\ensuremath{#1}}]{\kern-.6pt\bigwedge\kern-.6pt}%
+    {\rule[-\textheight/2]{1ex}{\textheight}}%WIDTH-LIMITED BIG WEDGE
+  }{\textheight}%
+}{0.5ex}}%
+\stackon[1pt]{#1}{\scalebox{-1}{\tmpbox}}%
+}
+\providecommand{\widecheck}{\reallywidecheck}
+
+\newcommand\reallywidehat[1]{%
+\savestack{\tmpbox}{\stretchto{%
+  \scaleto{%
+    \scalerel*[\widthof{\ensuremath{#1}}]{\kern-.6pt\bigwedge\kern-.6pt}%
+    {\rule[-\textheight/2]{1ex}{\textheight}}%WIDTH-LIMITED BIG WEDGE
+  }{\textheight}%
+}{0.5ex}}%
+\stackon[1pt]{#1}{\tmpbox}%
+}
