@@ -1,0 +1,28 @@
+#for each image:
+  #for each shifted position:
+     #compute outputs of neurons in some "feature map"
+     #so, each neuron has an output for each shifted position of the image --> a vector of responses for each img (PSTH)
+  #add PSTH to tensor
+    
+#BUILD A TENSOR FROM THESE RESPONSES: neurons x imgs x PSTH
+
+#one further complication: we want the avg response over several trials
+#create different trials where the shifting order changes
+
+#One option is to randomly shift! instead of doing all shifts in order, shuffle the shifts every time
+#for each image:
+  #for each in trial in say, 10 trials:
+      #choose a random shifting order
+      #for each shifted position:
+         #compute outputs of neurons in some "feature map"
+         #so, each neuron has an output for each shifted position of the image --> a vector of responses for each img (PSTH)
+
+  #The final PSTH if the average between PSTHs of the 10 trials
+  #Add this avg PSTH to the tensor
+
+
+#1 - choose a subset of the feature maps (i.e. filters) and use all neurons in those
+   #(how to choose the feature maps?) -- you can pick the ones with highest output values
+#2 - randomly sample neurons from the entire set
+
+#TRY to limit the number of units you use to < 10.000
