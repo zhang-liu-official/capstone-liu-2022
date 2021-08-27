@@ -18,35 +18,38 @@ X = tensor(faces_norm1_X);
 rng('default'); 
 maxR = 35;
 norm_X = norm(X);
-nreps = 20;
+%nreps = 20;
 
-errors_opt_nonneg = zeros([maxR nreps]);
+errors_opt_nonneg = zeros(maxR);
 
 for r = 1:maxR
-    for rep = 1:nreps
+    %for rep = 1:nreps
 
      % with the non-negative constraint:
         M_opt_nonneg = cp_opt(X, r, 'init', 'rand' , 'lower', 0, 'opt_options', struct('printEvery', 0));
 
         Y = X - tensor(M_opt_nonneg);
-        errors_opt_nonneg(r, rep) = norm(Y) / norm_X;
+        errors_opt_nonneg(r) = norm(Y) / norm_X;
         
         fprintf('.');
         % shwo the progress and the speed
-    end
-    fprintf('%d (%.2f) \n',r, mean(errors_opt_nonneg(r,:)));
+    %end
+    %fprintf('%d (%.2f) \n',r, mean(errors_opt_nonneg(r,:)));
 end 
+F = M_opt_nonneg.u{1};
+save("factors_opt_nonneg.mat","F");
 
-errors_opt_nonneg = errors_opt_nonneg(1:35,:);
+for r = 1:maxR
+    scatter(r * ones(nreps), errors_als_rand_init(r,:), 25, 'k', 'X');
+    scatter([r], mean(errors_als_rand_init(r,:)), 25, 'k','filled');
+    mean_errors_als_rand_init(r) = mean(errors_als_rand_init(r,:));
+end 
+a1 = line([1:maxR], mean_errors_opt_nonneg, 'color', 'k');
 
 save("errors_opt_nonneg.mat","errors_opt_nonneg");
-
-
 %% Visualize the factors for nonnegative direct optimization:
 
 h = figure; hold on
-
-F = zeros([maxR 9216]);
 
 for r = 1:maxR
     f = M_opt_nonneg.u{2}(:,r) * M_opt_nonneg.u{3}(:,r)';
@@ -55,10 +58,13 @@ for r = 1:maxR
     % matlab reads by columns -> need to transpose
     axis image;
     % preserve image aspect ratio
-    F(r,:) = reshape(f',[1 9216]); 
 end
-save("factors_opt_nonneg.mat","F");
+
 pubgraph(h,14,2,'w')
+
+
+F = M_gcp_rayleigh.u{1};
+save("factors_gcp_rayleigh.mat", "F");
 
 %% NEW CODE FROM HERE ON
 
@@ -78,10 +84,15 @@ pubgraph(h,14,2,'w')
 F = importdata('factors_opt_nonneg.mat');
 [COEFF, SCORE, LATENT] = pca(F','NumComponents',5);
 
-faces_norm1_new = SCORE(:,1)' * faces_norm1';
-faces_norm1_new = reshape(faces_norm1_new, [1000 1]);
+%faces_norm1_new = SCORE(:,1)' * faces_norm1';
+%faces_norm1_new = reshape(faces_norm1_new, [1000 1]);
 
-save("faces_norm1_new.mat","faces_norm1_new");
+projected_data = F' * COEFF;
+figure;
+plot(SCORE(:,1));
+hold on
+plot(projected_data(:,1) / LATENT(1,1));
+%save("faces_norm1_score.mat","SCORE");
 
 
 % visualize around 20 factors 
@@ -117,27 +128,21 @@ save("faces_norm1_new.mat","faces_norm1_new");
 % line([1:maxR], mean_errors_gcp, 'color', 'b');
 
 %% Generalized CP Decomp: Rayleigh
-rng('default')
-errors_gcp_rayleigh = zeros([maxR nreps]);
+
+errors_gcp_rayleigh = zeros(maxR);
 for r = 1:maxR
-    for rep = 1:nreps
+    %for rep = 1:nreps
+        rng('default')
         M_gcp_rayleigh = gcp_opt(X, r, 'type','rayleigh', 'lower', 0,'init','rand','printitn',0);
         Y = X - tensor(M_gcp_rayleigh);
-        errors_gcp_rayleigh(r, rep) = norm(Y) / norm_X;
+        errors_gcp_rayleigh(r) = norm(Y) / norm_X;
         fprintf('.');
-    end
-    fprintf('%d (%.2f) \n',r, mean(errors_gcp_rayleigh(r,:)));
+    %end
+    %fprintf('%d (%.2f) \n',r, mean(errors_gcp_rayleigh(r,:)));
 end 
 
-figure; hold on
-for r = 1:maxR
-    scatter(r * ones(nreps), errors_gcp_rayleigh(r,:), 25, 'k', 'X');
-    scatter([r], mean(errors_gcp_rayleigh(r,:)), 25, 'b','filled');
-    mean_errors_gcp_rayleigh(r) = mean(errors_gcp_rayleigh(r,:));
-    
-end 
-figure;
-line([1:maxR], mean_errors_gcp_rayleigh, 'color', 'b');
+figure; 
+line([1:maxR], errors_gcp_rayleigh, 'color', 'b');
 
 %% Visualize the factors for GCP Rayleigh
 
@@ -159,7 +164,7 @@ pubgraph(h,14,2,'w')
 
 %% PCA and kmeans for faces_norm1, gcp_rayleigh
 
-F = importdata('factors_gcp_rayleigh.mat.mat');
+F = importdata('factors_gcp_rayleigh.mat');
 [COEFF, SCORE, LATENT] = pca(F','NumComponents',5);
 
 faces_norm1_new_gcp_rayleigh = SCORE(:,1)' * faces_norm1';
@@ -168,21 +173,26 @@ faces_norm1_new_gcp_rayleigh = reshape(faces_norm1_new_gcp_rayleigh, [1000 1]);
 save("faces_norm1_new_gcp_rayleigh.mat","faces_norm1_new_gcp_rayleigh");
 
 %% Generalized CP Decomp: gamma
-rng('default');
+
 errors_gcp_gamma = zeros(maxR);
 for r = 1:maxR
-    %for rep = 1:nreps
+        rng('default')
         M_gcp_gamma = gcp_opt(X, r, 'type','gamma', 'lower', 0,'init','rand','printitn',0);
         Y = X - tensor(full(M_gcp_gamma));
         errors_gcp_gamma(r) = norm(Y) / norm_X;
         fprintf('.');
-    %end
-    %fprintf('%d (%.2f) \n',r, mean(errors_gcp_gamma(r,:)));
-end 
+end
 
-save("errors_gcp_gamma.mat","errors_gcp_gamma");
-figure;
-line([1:maxR], errors_gcp_gamma, 'color', 'b');
+F = M_gcp_gamma.u{1};
+save("factors_gcp_gamma.mat", "F");
+
+figure; hold on
+for r = 1:maxR
+    scatter(r * ones(nreps), errors_gcp_gamma(r,:), 25, 'k', 'X');
+    scatter([r], mean(errors_gcp_gamma(r,:)), 25, 'b','filled');
+    mean_errors_gcp_gamma(r) = mean(errors_gcp_gamma(r,:));
+end 
+line([1:maxR], mean_errors_gcp_gamma, 'color', 'b');
 
 %% Visualize the factors for GCP Gamma
 
@@ -202,13 +212,46 @@ end
 save("factors_gcp_gamma.mat","F");
 pubgraph(h,14,2,'w')
 
+%%  Generalized CP Decomp: Huber
+errors_gcp_huber = zeros(maxR);
+for r = 1:maxR
+        rng('default')
+        M_gcp_huber = gcp_opt(X, r, 'type','huber (0.25)','init','rand','printitn',0);
+        Y = X - tensor(full(M_gcp_huber));
+        errors_gcp_huber(r) = norm(Y) / norm_X;
+        fprintf('.');
+    %fprintf('%d (%.2f) \n',r, mean(errors_gcp_gamma(r,:)));
+end 
+
+F = M_gcp_huber.u{1};
+save("factors_gcp_huber.mat", "F");
+
+figure; 
+line([1:maxR], errors_gcp_huber, 'color', 'b');
+
+%% Visualize the factors for GCP Huber
+
+h = figure; hold on
+
+F = zeros([maxR 9216]);
+
+for r = 1:maxR
+    f = M_gcp_huber.u{2}(:,r) * M_gcp_huber.u{3}(:,r)';
+    subplot(7, 5, r);
+    imagesc(f');
+    % matlab reads by columns -> need to transpose
+    axis image;
+    % preserve image aspect ratio
+    F(r,:) = reshape(f',[1 9216]); 
+end
+pubgraph(h,14,2,'w')
 %% PCA and kmeans for faces_norm1, gcp_gamma
 
-F = importdata('factors_gcp_gamma.mat');
+F = importdata('factors_gcp_gamma.mat.mat');
 [COEFF, SCORE, LATENT] = pca(F','NumComponents',5);
 
-faces_norm1_new_gcp_gamma = SCORE(:,1)' * faces_norm1';
-faces_norm1_new_gcp_gamma = reshape(faces_norm1_new_gcp_gamma, [1000 1]);
+faces_norm1_new = SCORE(:,1)' * faces_norm1';
+faces_norm1_new = reshape(faces_norm1_new, [1000 1]);
 
 save("faces_norm1_new_gcp_gamma.mat","faces_norm1_new_gcp_gamma");
 
