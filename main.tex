@@ -10,7 +10,6 @@
 \usepackage{tikz}
 \usepackage{verbatim}
 \usepackage{mathtools}
-\usepackage{pgfplots}
 \usepackage[margin=1in]{geometry}
 \usepackage{xcolor,graphicx}
 \usepackage{macros}
@@ -21,14 +20,236 @@
 \usepackage{bbm}
 \DeclareUnicodeCharacter{2212}{-}
 \captionsetup{font=normalsize,labelfont={bf,sf}}
-\captionsetup[subfigure]{font=scriptsize,labelfont=scriptsize}
 
-\title{Capstone Project Notes}
+\title{Manifold Structure of High-Dimensional Data in Visual Perception}
 \author{Liu Zhang}
 \date{\today}
 
 \begin{document}
 
 \maketitle
-\section{Week 0. August 2 - August 6}
+
+\section{Abstract}
+
+This work builds on a long line of research aiming to develop more accurate mathematical and computational models of the visual system. It has recently been shown that feed-forward neural networks turn out to be inaccurate models for the brain. We focused on a related question that has not been investigated: how is the structure of recurrent and transformer neural networks related to that of neurobiological networks (in the mouse visual cortex)?
+
+We first build the biological and artificial neuron tensors using experimental neural spiking data and numerical simulations on recurrent and transformer neural networks. Using tensor component analysis, we discover which groups of neurons respond similarly to which stimuli input. Since these groups are likely not independent, we use the non-linear dimensionality reduction method, diffusion maps, to infer a manifold of neurons. This manifold structure implies a functional network (represented by the discrete data graph underlying the continuous manifold) and thus reflects both the neural circuit connections and the neuron’s role in those circuits. Comparing the manifold structures of biological and artificial neural networks allows us to make precise inferences about similarities and differences in their respective functional circuits. 
+
+\section{Analyzing the problem}
+\subsection{The problem, motivated from a neuroscience perspective:}
+\begin{itemize}
+    \item How are neurons organized?
+    \item We want to figure out the functional geometry: distance  $\propto$ similarity in terms of neural response to some given stimulus.
+\end{itemize}
+
+\subsection{The problem, motivated from a mathematical perspective:} 
+\begin{itemize}
+    \item Dimensionality reduction 
+    \item Spectral clustering
+    \item Random walks on graphs/groups (equivalent reformulations of the same problem)
+    \item From the frequency domain (spectrum) to the physical domain (geometry)
+    \item Non-abelian harmonic analysis
+\end{itemize}
+
+More on the connections between neuroscience and mathematics, based on Citti and Sarti's collection, \textit{Neuromathematics of Vision} \cite{citti_neuromathematics_2014}:
+\begin{itemize}
+    \item sub-Riemannian geometry is important to model long-range horizontal connections
+    \item harmonic analysis in non commutative groups is fundamental to understanding the pinwheels structure 
+    \item non-linear dimensionality reduction is at the base of many neural morphologies and possibly of the emergence of perceptual units
+\end{itemize}
+
+\subsection{Questions}
+\begin{enumerate}
+    \item On diffusion maps: is Gaussian kernel the most suitable similarity kernel? How to evaluate which kernel is the most suitable? 
+    \item How can we find out the number of steps $t$ needed to reach the equilibrium distribution? Is it useful to ask this question? 
+    \item Is the diffusion matrix $P$ defined in \cite{coifman_diffusion_2006} the same as the $M$ matrix? What is the relation between this matrix and the Laplacian discretization? 
+    \item How does the diffusion maps technique compare to other non-linear dimensionality reduction methods?
+\end{enumerate}
+\subsection{Some ideas}
+\begin{enumerate}
+    \item Relevance of topological methods:
+    
+    Preliminary experiments to extract topological features from the neural spiking data: would it be interesting to use topological methods to infer useful information about the functional geometry? (see python notebook for some preliminary results on this)
+    
+    This paper \cite{chung_neural_2021} also provides a comprehensive review that includes both geometric methods and topological methods in determining the manifold structures of biological and artificial neural networks.
+    
+    \item Harmonic analysis on non-commutative groups: How relevant is this area to our research problem? If so, in what ways? Random walks on groups?
+    
+\end{enumerate}
+
+\section{Dimensionality reduction}
+
+The main motivation behind dimensionality reduction: the intrinsic dimension of the data is usually much lower than the extrinsic dimension and the high-dimensionality is usually just an artifact of the representation. The representation of data has a potentially large degree of freedom, that is, the number of variables that are really necessary to describe the data is much smaller. 
+
+\subsection{Linear dimensionality reduction: tensor factorization}
+References for this section: \cite{kolda_tensor_2009}, \cite{hong_generalized_2020}.
+
+\subsection{Non-linear dimensionality reduction: diffusion maps}
+References for this section:\cite{coifman_geometric_2005}, \cite{coifman_diffusion_2006}.
+\par \textbf{Some key ideas of diffusion maps: }
+\begin{itemize}
+    \item The similarity kernel gives us the \textit{local} geometry. As the time steps move forward, we integrate the local geometry and thus reveal the geometric structures at different scales. 
+    \item A cluster from a random walk is a region where the probability of escaping this region is low.
+\end{itemize}
+\par \textbf{Main steps of diffusion maps: }
+
+\begin{enumerate}
+    \item Construct weighted graph using Gaussian similarity kernel. Each entry in the similarity matrix, $W_{i j}$, is the pairwise similarity value between inputs $i$ and $j$ and is taken as the weight of the edge between nodes $i$ and $j$. 
+    
+    \begin{align}
+        W_{i j } = \exp\{-\frac{\|x_i - x_j\|^2}{2\sigma^2}\}.
+    \end{align}
+    
+    \item We can construct a lazy random walk with the probability of reaching node $j$ from $i$, $p(j \mid i)$, proportional to their pairwise similarity value $W_{i j}$. (The random walk is lazy if we allow $p(i\mid i) > 0$, i.e., to stay at some point $i$ as the time step moves forward). 
+    \begin{align}
+        p(j\mid i) = \frac{W_{i j}}{\sum_{k} W_{i k}}.
+    \end{align}
+    
+    The probabilities can be represented by a Markov matrix $M$, which is essentially the similarity matrix normalized to have row sums equal to $1$:
+     \begin{align}
+        M = D^{-1} W, \text{where } D_{i i} =\sum_{k}W_{i k}.
+    \end{align}
+    The probability of reaching node $j$ from $i$ after $t$ steps is then
+    \begin{align}
+        p(t,j\mid i) = e_i^T M^t e_j.
+    \end{align}
+
+    \item Eigendecomposition of the Markov matrix:
+    
+    The eigendecomposition of $M$ is derived from the eigendecomposition of $M_s = D^{1/2} M D^{-1/2} = \Omega \Lambda \Omega^T$:
+    \begin{align}
+        M = D^{-1/2}  \Omega \Lambda \Omega^T D^{-1/2} \coloneqq \Psi \Lambda \Phi^T,
+    \end{align}
+    
+    Note that since $\Psi$ and $\Phi$ are mutually orthogonal, $\Psi$ contains the right eigenvectors, as shown below:
+     \begin{align}
+        M \Psi =  \Psi \Lambda \Phi^T \Psi = \Psi \Lambda =  \Lambda \Psi.
+    \end{align}
+    
+    The eigendecomposition of $M$ after $t$ steps is then
+    \begin{align}
+        M = \Psi \Lambda^t \Phi^T.
+    \end{align}
+    
+    \begin{itemize}
+        \item Diffusion coordinate functions: right eigenvectors of Markov matrix scaled by their corresponding eigenvalues: 
+        \begin{align}
+            \Upsilon \coloneqq \Psi \Lambda.
+        \end{align}
+        \item Diffusion distance after $t$ steps: 
+       \begin{align}
+            \| e_i^T  \Upsilon - e_j^T \Upsilon  \|^2 = \sum_{k} (p(t,k\mid i) - p(t,k\mid j))^2 (D_{k k}^{-1}).
+       \end{align}
+       
+       \item Growth of eigenvalues leads to geometric properties (more on spectral geometry).
+       
+       Two extreme situations:
+       \begin{enumerate}
+           \item If disconnected graph (none of the nodes are connected), then:
+           \[P = I, \lambda_i = \lambda_j \quad \forall i, j, \]
+           which implies a flat spectrum with zero decay rate.
+           \item If fully connected graph (each of the node is connected to all the rest of the nodes), assuming weights of all edges are $1$, then:
+            \[\lambda_1 = 1, \lambda_i = 0 \quad \forall i \neq 1.\]
+       \end{enumerate}
+    \end{itemize}
+    
+    
+\end{enumerate}
+\section{Harmonic analysis on non-commutative groups}
+
+\subsection{Random walks on finite groups}
+From \cite{pak_random_1997}, a classical result of Markov Chain Theory states the following:
+\begin{thm}
+Let $W = (G,S,P)$ be a directed random walk. Then the probability distribution $Q^k(g)$ tends to uniform stationary distribution $\pi(g) =\frac{1}{|G|}$ as $k$ tends to infinity.
+\begin{itemize}
+    \item $G$ is a finite group. 
+    \item $S$ is a symmetric set of generators and $e\in S$. 
+    \item $P$ is symmetric and strictly positive on $S$. $P$ is a probability distribution on $S$ such that
+    \[\begin{cases*}
+        P(g\to g \cdot s) = p(s) & if $s \in S, g\in G$  \\
+        P(g\to g^\prime) = 0     & otherwise*, $g,g^\prime \in G$
+    \end{cases*} \]
+    (* if $g^\prime$ is not in the form $g\cdot s$)
+    \item $Q^k(g) = P(X_k =g) g\in G$ is the probability distribution of the state of the random walk after $t$ steps. 
+\end{itemize} 
+\end{thm}
+\begin{thm}
+Denote $p = p(e), q = p(s), s\in \check{S}$. Then 
+\begin{equation}
+    Q^k(g) = \sum^k_{l = l_s(g)} r_i(g) p^{k-l} q^l {k \choose l}.
+\end{equation}
+\end{thm}
+
+\par Other related ideas that we have explored include:
+\begin{itemize}
+    \item random walks on finite cyclic groups and time to reach stationarity for the simple random walk on the discrete cicle
+    \item random walks on the hypercube (and the time to reach stationarity in the Ehrenfest diffusion model)
+    \item random walks on infinite groups
+    \item group representations
+\end{itemize}
+For the above topics, mostly we referred to these two books: \cite{ceccherini-silberstein_harmonic_2008} and \cite{diaconis_group_1988}. 
+
+\section{Spectral Graph Theory}
+\subsection{Graph Laplacian}
+\begin{itemize}
+    \item Discretization of the Laplacian operator
+    
+  In one dimension, the Laplacian is the second derivative, which can be approximated with the following discretization,
+\begin{align}
+    \frac{d^2}{dx^2}r(x_i) \approx \frac{r(x_{i-1}) + r(x_{i+1}) - 2 r(x_i)}{(\Delta x)^2},
+\end{align}
+where $\Delta x = x_j - x_{j-1}$ for all $j$.
+
+This gives us the following matrix approximation for the Laplacian operator:
+\begin{equation}
+L_n = \frac{1}{(\Delta x)^2}
+\begin{pmatrix}
+    -1  &1  &   &   &   &   &\\
+    1   &-2 &1  &   &   &   &\\
+        &1  &-2 &1  &   &   &\\
+        &   &   &\ddots & & &\\
+        &   &   &   &1  &-2 &1\\
+        &   &   &   &   &1  &-1
+\end{pmatrix},
+\end{equation}
+where we use the Neumann boundary conditions to choose the top left and bottom right entries. The Neumann boundary condition in this case is $r'(x_{\text{boundary}}) = 0$.
+
+\item Graph Laplacian and random walks
+
+\end{itemize}
+
+\subsection{Inverse problems in spectral geometry}
+References for this section: \cite{lablee_spectral_2015}, \cite{kac_can_1966}
+\textbf{Main idea: connections between the geometry of the manifold and the spectrum of a linear unbounded operator on that manifold. }
+
+Given a compact Riemannian manifold $(M,g)$, we can associate to it a linear unbounded operator $-\Delta_g$. We denote the spectrum of $-\Delta_g$ by 
+$$Spec(M,g) = (\lambda_k(M))_k.$$
+
+Equivalently, $\forall k \geq 0$, there exists a non-trivial eigenfunction $u_k$ on $M$  such that 
+$$-\Delta_g u_k = \lambda_k(M) u_k.$$
+
+\begin{itemize}
+    \item Direct problems: 
+    
+    Given a compact Riemannian manifold $(M,g)$, can we compute the spectrum $Spec(M,g)$? And can we find properties on the spectrum $Spec(M,g)$?
+    \item Inverse problems: 
+    \begin{enumerate}
+        \item Does the spectrum $Spec(M,g)$ determines the geometry of the manifold $(M,g)$? 
+        \begin{itemize}
+            \item the dimension of $(M,g)$
+            \item the volume of $(M,g)$
+            \item the integral of the scalar curvature $Scal_g$ over $(M,g)$.
+        \end{itemize}
+        
+        \item What sequences of real numbers can be spectra of a compact manifold?
+        
+        \item The spectrum of the manifold determines its length spectrum. (The length spectrum of a compact Riemannian manifold $(M,g)$ is the set of lengths of closed geodesics on $(M,g)$ counted with multiplicities.)
+        
+        \item If two Riemannian manifolds $(M,g)$ and $(M^\prime,g^\prime)$ are isospectral, are they isometric?
+    \end{enumerate}
+    \end{itemize}
+    
+\section{References}
+\bibliographystyle{plain}
+\bibliography{refs}
 \end{document}
