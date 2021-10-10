@@ -1,6 +1,6 @@
 # Capstone Liu 2022
 
-*Manifold Structure of High-Dimensional Data in Visual Perception*
+**Manifold Structure of High-Dimensional Data in Visual Perception**
 
 *Key words: manifold learning, recurrent neural networks, computational vision, neural data analysis, harmonic analysis*
 
@@ -13,15 +13,19 @@ To this end, the main approach of this project is to infer manifolds of neurons 
 The significance of this project is threefold. A first and more immediate contribution would be novel findings regarding whether recurrent models are accurate representations of V1. In a broader view, successful completion of this project can push the frontier of the field with a step closer towards better models of early vision, potentially offering insights for reverse-engineering new computer vision algorithms. Last but not least, the techniques used in this project are applicable to any high-dimensional data, which are prevalent in numerous areas beyond the sciences.
 
 
-## Milestone:
+## Milestones:
 
 Milestones for semester 1:
+
 (Theory)
+
 1. Study CPSC475 course materials shared by the co-supervisor Prof. Zucker
 2. Read papers related to manifold learning, recurrent and transformer neural networks, harmonic analysis
 3. Study the theory of Diffusion Maps papers in details
 4. Write up literature review and notes for important concepts
+
 (Implementation)
+
 5. Implement Diffusion Maps for the homework problems
 6. Implement Diffusion Maps for the neural spiking data with biological and artificial neuron tensors
 7. Review Diffusion Maps implementation with co-supervisor

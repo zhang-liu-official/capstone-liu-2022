@@ -1,3 +1,5 @@
+## matlab data:
+*.mat
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof
@@ -10,7 +12,7 @@
 *.fot
 *.cb
 *.cb2
-*.mat
+
 ## Intermediate documents:
 *.dvi
 *-converted-to.*
