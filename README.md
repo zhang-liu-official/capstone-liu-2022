@@ -1,6 +1,6 @@
 # Capstone Liu 2022
 
-**Manifold Structure of High-Dimensional Data in Visual Perception**
+**Manifold Structure of High-Dimensional Data from Biological and Artificial Neural Networks**
 
 *Key words: manifold learning, recurrent neural networks, computational vision, neural data analysis, harmonic analysis*
 
