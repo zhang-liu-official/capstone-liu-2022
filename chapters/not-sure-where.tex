@@ -1,0 +1,63 @@
+\section{Spectral Graph Theory}
+
+\subsection{Graph Laplacian}
+\begin{itemize}
+    \item Discretization of the Laplacian operator
+    
+  In one dimension, the Laplacian is the second derivative, which can be approximated with the following discretization,
+\begin{align}
+    \frac{d^2}{dx^2}r(x_i) \approx \frac{r(x_{i-1}) + r(x_{i+1}) - 2 r(x_i)}{(\Delta x)^2},
+\end{align}
+where $\Delta x = x_j - x_{j-1}$ for all $j$.
+
+This gives us the following matrix approximation for the Laplacian operator:
+\begin{equation}
+L_n = \frac{1}{(\Delta x)^2}
+\begin{pmatrix}
+    -1  &1  &   &   &   &   &\\
+    1   &-2 &1  &   &   &   &\\
+        &1  &-2 &1  &   &   &\\
+        &   &   &\ddots & & &\\
+        &   &   &   &1  &-2 &1\\
+        &   &   &   &   &1  &-1
+\end{pmatrix},
+\end{equation}
+where we use the Neumann boundary conditions to choose the top left and bottom right entries. The Neumann boundary condition in this case is $r'(x_{\text{boundary}}) = 0$.
+
+\item Graph Laplacian and random walks
+
+\end{itemize}
+
+\subsection{Inverse problems in spectral geometry}
+References for this section: \cite{lablee_spectral_2015}, \cite{kac_can_1966}
+\textbf{Main idea: connections between the geometry of the manifold and the spectrum of a linear unbounded operator on that manifold. }
+
+Given a compact Riemannian manifold $(M,g)$, we can associate to it a linear unbounded operator $-\Delta_g$. We denote the spectrum of $-\Delta_g$ by 
+$$Spec(M,g) = (\lambda_k(M))_k.$$
+
+Equivalently, $\forall k \geq 0$, there exists a non-trivial eigenfunction $u_k$ on $M$  such that 
+$$-\Delta_g u_k = \lambda_k(M) u_k.$$
+
+\begin{itemize}
+    \item Direct problems: 
+    
+    Given a compact Riemannian manifold $(M,g)$, can we compute the spectrum $Spec(M,g)$? And can we find properties on the spectrum $Spec(M,g)$?
+    \item Inverse problems: 
+    \begin{enumerate}
+        \item Does the spectrum $Spec(M,g)$ determines the geometry of the manifold $(M,g)$? 
+        \begin{itemize}
+            \item the dimension of $(M,g)$
+            \item the volume of $(M,g)$
+            \item the integral of the scalar curvature $Scal_g$ over $(M,g)$.
+        \end{itemize}
+        
+        \item What sequences of real numbers can be spectra of a compact manifold?
+        
+        \item The spectrum of the manifold determines its length spectrum. 
+        
+        (The length spectrum of a compact Riemannian manifold $(M,g)$ is the set of lengths of closed geodesics on $(M,g)$ counted with multiplicities.)
+        
+        \item If two Riemannian manifolds $(M,g)$ and $(M^\prime,g^\prime)$ are isospectral, are they isometric?
+    \end{enumerate}
+    \end{itemize}
+    
