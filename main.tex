@@ -56,7 +56,10 @@ headsepline, % Uncomment to get a line under the header
 \usepackage{hyperref}
 \usepackage{amsmath}
 \usepackage{macros}
+\usepackage{mathtools}
 \usepackage{float}
+\usepackage{newtxmath}
+\usepackage{polski}
 \usepackage[backend=bibtex,style=authoryear,natbib=true]{biblatex} % Use the bibtex backend with the authoryear citation style (which resembles APA)
 %\usepackage[backend=bibtex,style=authoryear,natbib=true,backref=true]{biblatex} % use this line instead of the previous one if you want to use back references
 
@@ -173,38 +176,6 @@ We first build the biological and artificial neuron tensors using experimental n
 %
 % In addition, code for displaying results in real-time, modules for managing servo overload, network latency and other factors were also written by the author.
 
-
-% %----------------------------------------------------------------------------------------
-% %	DECLARATION PAGE
-% %----------------------------------------------------------------------------------------
-%
-% \begin{declaration}
-% \addchaptertocentry{\authorshipname} % Add the declaration to the table of contents
-%
-% \noindent I, \authorname, hereby declare that this Project, the Capstone Report and associated work listed herein, is the end result of my own work and that due acknowledgement has been given in the bibliography and references to ALL sources printed, electronic, or personal, in accordance with the academic regulations of Yale‐NUS College.
-% I acknowledge that the Thesis is subject to the policies relating to Yale‐NUS College Intellectual  Property (Yale‐NUS HR 039).
-%
-%
-% % I confirm that:
-% %
-% % \begin{itemize}
-% % \item This work was done wholly or mainly while in candidature for a research degree at this University.
-% % \item Where any part of this thesis has previously been submitted for a degree or any other qualification at this University or any other institution, this has been clearly stated.
-% % \item Where I have consulted the published work of others, this is always clearly attributed.
-% % \item Where I have quoted from the work of others, the source is always given. With the exception of such quotations, this thesis is entirely my own work.
-% % \item I have acknowledged all main sources of help.
-% % \item Where the thesis is based on work done by myself jointly with others, I have made clear exactly what was done by others and what I have contributed myself.\\
-% % \end{itemize}
-%
-% \noindent Signed:\\
-% \rule[0.5em]{25em}{0.5pt} % This prints a line for the signature
-%
-% \noindent Date:\\
-% \rule[0.5em]{25em}{0.5pt} % This prints a line to write the date
-% \end{declaration}
-%
-% \cleardoublepage
-
 %----------------------------------------------------------------------------------------
 %	QUOTATION PAGE
 %----------------------------------------------------------------------------------------
@@ -215,75 +186,22 @@ We first build the biological and artificial neuron tensors using experimental n
 %
 % \hfill Dave Barry
 
-%----------------------------------------------------------------------------------------
-%	LIST OF CONTENTS/FIGURES/TABLES PAGES
-%----------------------------------------------------------------------------------------
-
-\tableofcontents % Prints the main table of contents
-
-\listoftables % Prints the list of tables
-\label{lst:tabs}
-
-\listoffigures % Prints the list of figures
-\label{lst:figs}
-%----------------------------------------------------------------------------------------
-%	ABBREVIATIONS
-%----------------------------------------------------------------------------------------
-
-% \begin{abbreviations}{ll} % Include a list of abbreviations (a table of two columns)
-%
-% \textbf{LAH} & \textbf{L}ist \textbf{A}bbreviations \textbf{H}ere\\
-% \textbf{WSF} & \textbf{W}hat (it) \textbf{S}tands \textbf{F}or\\
-%
-% \end{abbreviations}
-
-%----------------------------------------------------------------------------------------
-%	PHYSICAL CONSTANTS/OTHER DEFINITIONS
-%----------------------------------------------------------------------------------------
-
-% \begin{constants}{lr@{${}={}$}l} % The list of physical constants is a three column table
-%
-% % The \SI{}{} command is provided by the siunitx package, see its documentation for instructions on how to use it
-%
-% Speed of Light & $c_{0}$ & \SI{2.99792458e8}{\meter\per\second} (exact)\\
-% %Constant Name & $Symbol$ & $Constant Value$ with units\\
-%
-% \end{constants}
-
-%----------------------------------------------------------------------------------------
-%	SYMBOLS
-%----------------------------------------------------------------------------------------
-
-% \begin{symbols}{lll} % Include a list of Symbols (a three column table)
-%
-% $a$ & distance & \si{\meter} \\
-% $P$ & power & \si{\watt} (\si{\joule\per\second}) \\
-% %Symbol & Name & Unit \\
-%
-% \addlinespace % Gap to separate the Roman symbols from the Greek
-%
-% $\omega$ & angular frequency & \si{\radian} \\
-%
-% \end{symbols}
-
-
+\tableofcontents
 
 %----------------------------------------------------------------------------------------
 %	THESIS CONTENT - CHAPTERS
 %----------------------------------------------------------------------------------------
 
-\mainmatter % Begin numeric (1,2,3...) page numbering
+\mainmatter 
+\pagestyle{thesis}
 
-\pagestyle{thesis} % Return the page headers back to the "thesis" style
-
-% Include the chapters of the thesis as separate files from the Chapters folder
-% Uncomment the lines as you write the chapters
-
+\input{chapters/chapter0}
 \input{chapters/chapter1}
 \input{chapters/chapter2}
 \input{chapters/chapter3}
 \input{chapters/chapter4}
 \input{chapters/chapter5}
+\input{chapters/chapter6}
 
 %----------------------------------------------------------------------------------------
 %	BIBLIOGRAPHY
