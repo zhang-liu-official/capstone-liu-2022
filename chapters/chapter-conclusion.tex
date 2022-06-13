@@ -1,0 +1,26 @@
+\chapter{Conclusion}
+\label{chapter-conclusion} 
+
+\section{Summary and discussion of results}
+Our results were the first to show that CNN and ViT form discontinuous neural manifold whereas adding recurrent units to the network forms a more continuous manifold. From this we can infer that  CNN and ViT form isolated neural circuits and recurrent connections increase the connectivity of the underlying neural circuits. We reformulate our results in terms of conjectures that address the open questions raised in section \ref{intro-motivation}:
+\begin{itemize}[noitemsep, topsep=0pt]
+    \item \textit{How do computer vision models (VGG16 \cite{vgg16_simonyan_very_2015}, Vision Transformer \cite{vit_dosovitskiy_image_2021}, and Convolutional Recurrent Neural Network \cite{convrnn_shi_end--end_2015}) compare to biological vision, specifically in the regions retina and V1?} 
+    
+    \textbf{Conjecture 1.} The underlying neural circuits in feed-forward networks, including CNN and ViT, are closer to that in retina than that in V1. In other words, they are decent models for retina but are severely limited as models for V1.
+    
+    \item \textit{What specific feature(s) in computer vision models lead to the differences in the neural circuits?}
+    
+    \textbf{Conjecture 2.} Incorporating recurrent mechanisms in computer vision models seems to be crucial in increasing the connectivity of the underlying neural circuits.
+\end{itemize}
+
+The implication of \textbf{Conjecture 1} is that, contrary to popular belief, current computer vision models turn out to be poor approximations of visual cortical circuits (although they are indeed inspired by early studies of the visual cortex and perform well on image recognition tasks). These feed-forward networks are good enough as models for the retina, but fail to capture the characteristics of the functional neural circuits in the visual cortex. \textbf{Conjecture 2} suggests that recurrence seems to be the missing key to a more accurate model of the visual cortex. In the next section, we will propose future research in three directions:
+
+\section{Future directions}
+\subsection{Understanding the role of recurrence in vision}
+Recurrence is a characteristic feature in not only biological vision but also most of our important brain functions. However, recurrence is largely missing from most of the popular computer vision models today. Our results have suggested that recurrence is key to increasing the connectivity of the underlying functional neural circuits in the neural networks (both artificial and biological). Since richer functional connectivity is a desirable feature for neural networks when solving visual tasks that involve more complex reasoning, it could potentially have significant implication in advocating the merit of incorporating recurrent mechanisms into computer vision models. Thus, we propose a more extensive analysis of the role of recurrence in both biological vision and computer vision. 
+
+\subsection{Experimenting with recurrent models}
+The experiments in Chapter \ref{chapter-artificial} have solved some open questions that we set out to tackle, but they also leave us with many more intriguing observations that we have not understood fully. Building on the results we have obtained during the capstone, we will continue and focus on studying how various recurrent structures affect the the neural manifold. We are currently in the process of obtaining an additional pre-trained network model \cite{serre-recurrence}, which includes recurrent connections directly to the convolutional layers. Our current investigation on the neural manifold of artificial neural networks with recurrent structures is still limited: we have only studied CRNN which add recurrently layers after the convolutional layers. This might not be sufficient and we believe that the model in \cite{serre-recurrence} that adds recurrence directly to the convolutional layers would be a promising place to continue. It would be of interest to find out whether (and if so, why) adding recurrence in different ways may result in manifolds with different structure. We can apply the mean flow algorithm to precisely quantify the extent to which each kind of recurrent structure change the continuity of the neural manifold.
+
+\subsection{Applying nonlinear dimensionality reduction}
+Although the linear dimensionality reduction method (tensor CP decomposition) has been working well so far, this could be a potential limitation of our current study, especially since that both network science and neural dynamics are typical contexts where nonlinear systems arise. It might be interesting to apply the nonlinear dimensionality reduction method (diffusion map) to compare the results.  

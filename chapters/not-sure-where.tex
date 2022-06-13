@@ -1,3 +1,34 @@
+
+
+by yoshua bengio
+The term manifold hypothesis is indeed older than the deep learning revolution, although the concept was already present in the early days of autoencoders in the early 90s (not under that name, but same idea) and self-organizing maps in the 80s, not to mention PCA even earlier (but that was limited to linear manifolds). And the group around me at U. Montreal in the 200x's and early 201x's worked quite a bit on the concept, in the context of modelling which concentrate near a lower-dimensional set (i.e. a manifold), e.g., with denoising auto-encoders (work led by Pascal Vincent) and contractive auto-encoders (led by Salah Rifai). We also worked on how the manifold hypothesis impacted generative models and the difficulty of sampling (and how to sample) when there are multiple manifolds far from each other (the mixing problem in MCMC).
+% https://arxiv.org/ftp/arxiv/papers/2104/2104.07059.pdf#:~:text=The%20term%20neural%20manifold%20has,11%2C26%2C27%5D.
+
+% https://www.reddit.com/r/MachineLearning/comments/mzjshl/comment/gwq8szw/?utm_source=share&utm_medium=web2x&context=3
+
+Key to this choice is the network/manifold duality: at finite scale the data are discrete, thereby suggesting a network among neurons.
+ Since previous works have already trained the VGG16 model to obtain optimal weights, n our experiments, we directly use the pre-trained weights.
+https://shantoroy.com/latex/how-to-write-algorithm-in-latex/
+\subsection{How to generate the neural manifold?}
+The task of generating the neural manifold is equivalent to learning\footnote{``Learning" here refers to unsupervised learning, which is a class of methods in machine learning that discover meaningful features without training data.} the low-dimensional manifold underlying the original high-dimensional neural spiking data, which amounts to a dimensionality reduction task. In our project, we use both the linear dimensionality reduction method tensor canonical polyadic (CP) decomposition and the nonlinear dimensionality reduction method diffusion map. The theoretical preliminaries for these two methods will be explained in full details in the next two chapters. Our project now primarily focuses on the linear method: even if the system turns out to be nonlinear, it is useful to begin studying the structure using the linear method to obtain insights as to the nature of the nonlinearities.
+% The original representation of data has a large degree of freedom, that is, the number of variables that are really necessary to describe the data is much smaller than the number of variables in the original representation. 
+
+
+
+In vision science, core object recognition has largely been studied as a feed-forward process down what is called the visual ventral stream \parencite{dicarlo_how_2012}.
+% https://xcorr.net/2021/04/16/is-early-vision-like-a-convolutional-neural-net/
+The Neocognitron also introduces what may be the defining features of modern CNNs: parallel feature maps (here called planes) and weight sharing. This is most clearly seen in the selectivity operation for S-layers, which is a convolution over the set of local coordinates $S_l$, followed by a ReLU:
+(figure)
+
+From Fukushima (1980)
+The reason behind the introduction of parallel feature maps and weight sharing is not very clear in the original paper, and in fact in section 3 the paper casts doubt on how realistic these assumptions are as a model of vision:
+
+One of the basic hypotheses employed in the neocognitron is the assumption that all the S-cells in the same S-plane have input synapses of the same spatial distribution, and that only the positions of the presynaptic cells shift in parallel in accordance with the shift in position of individual S-cell’s receptive fields. It is not known whether modifiable synapses in the real nervous system are actually self-organized always keeping such conditions. Even if it is assumed to be true, neither do we know by what mechanism such a self-organization goes on.
+
+The vertebrate visual system is hierarchically organized to process visual information in successive stages. Neural representations vary drastically across the first stages of visual processing: at the output of the retina, ganglion cell receptive fields (RFs) exhibit a clear antagonistic center-surround structure, whereas in the primary visual cortex (V1), typical RFs are sharply tuned to a precise orientation.
+
+We have reviewed two major principles that characterize the flow of information from retina to cortex. First, visual information is organized into separate visual streams. These streams begin in the retina and continue along separate neural pathways into the brain. Second, the receptive field properties of neurons become progressively more sophisticated. Receptive fields of cortical neurons show selective responses to stimulus properties that are more complex than retinal neurons. The new receptive field properties are clues about the specialization of the computations performed within the visual cortex.
+
 \par The problem, motivated from a mathematical perspective:
 \begin{itemize}
     \item Dimensionality reduction 
@@ -76,3 +107,5 @@ $$-\Delta_g u_k = \lambda_k(M) u_k.$$
     \end{enumerate}
     \end{itemize}
     
+    
+There is no doubt that a single stimulus initiates a characteristic flow of neuronal discharge from the retina to the LGNd to V1 in a hierarchical manner. Unfortunately, the complexity of corticocortical connections and functional differentiation in primate visual streams renders further predictions highly speculative (51).

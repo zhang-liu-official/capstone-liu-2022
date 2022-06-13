@@ -56,9 +56,9 @@
 \LoadClass{\baseclass}
 
 %  Simple interface for the user  to customize the chapter titles 
-\ProvideDocumentCommand{\abovechapterskip}{}{\vspace*{20pt}}
-\ProvideDocumentCommand{\chapterbelowskip}{}{\vspace*{40pt}}
-\ProvideDocumentCommand{\chapterinbetweenskip}{}{\vspace*{20pt}}
+\ProvideDocumentCommand{\abovechapterskip}{}{\vspace*{-40pt}}
+\ProvideDocumentCommand{\chapterbelowskip}{}{\vspace*{10pt}}
+\ProvideDocumentCommand{\chapterinbetweenskip}{}{\vspace*{0pt}}
 \ProvideDocumentCommand{\autodot}{}{}
 \ProvideDocumentCommand{\mdtChapapp}{}{}
 \ProvideDocumentCommand{\chapteralign}{}{\raggedright}
@@ -235,7 +235,7 @@
 \newcommand{\HRule}{\rule{.9\linewidth}{.6pt}} % New command to make the lines in the title page
 \newcommand{\decoRule}{\rule{.8\textwidth}{.4pt}} % New command for a rule to be used under figures
 
-\setcounter{tocdepth}{3} % The depth to which the document sections are printed to the table of contents
+\setcounter{tocdepth}{1} % The depth to which the document sections are printed to the table of contents
 \ProvideDocumentCommand{\addchaptertocentry}{ m }{%
 	\addcontentsline{toc}{chapter}{#1}%
 }
@@ -343,7 +343,8 @@ KOMA-script documentation for details.}]{fancyhdr}
 \newcommand{\abstractname}{Abstract}
 \providecaptionname{german,ngerman,austrian,naustrian}{\byname}{von}
 \providecaptionname{american,australian,british,canadian,english,newzealand,UKenglish,USenglish}{\byname}{by}
-\ifbool{consistentlayout}{
+\ifbool{consistentlayout}
+{
 	\DeclareDocumentEnvironment{abstract}{ O{} }{%
 		\addchap*{\abstractname}%
 		{\chapteralign\normalsize\abstractauthorfont \authorname \par}% Author name

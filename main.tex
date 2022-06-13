@@ -11,16 +11,21 @@ doublespacing, % Single line spacing, alternatives: onehalfspacing or singlespac
 %parskip, % Uncomment to add space between paragraphs
 %nohyperref, % Uncomment to not load the hyperref package
 headsepline, % Uncomment to get a line under the header
-%chapterinoneline, % Uncomment to place the chapter title next to the number on one line
+chapterinoneline, % Uncomment to place the chapter title next to the number on one line
 %consistentlayout, % Uncomment to change the layout of the declaration, abstract and acknowledgements pages to match the default layout
 ]{MastersDoctoralThesis} % The class file specifying the document structure
 
 \usepackage[utf8]{inputenc} % Required for inputting international characters
 \usepackage[T1]{fontenc} % Output font encoding for international characters
 \usepackage{subcaption}
+\usepackage[belowskip=-15pt,aboveskip=0pt]{caption}
+\setlength{\textfloatsep}{10pt plus 2.0pt minus 2.0pt}
+\setlength{\intextsep}{10pt plus 2pt minus 2pt}
+\setlength{\floatsep}{10pt plus 2.0pt minus 2.0pt}
 \usepackage{mathpazo} % Use the Palatino font by default
 \usepackage{booktabs}
 \usepackage{colortbl}
+\usepackage[ruled,vlined,linesnumbered,algochapter]{algorithm2e}
 \usepackage[final]{pdfpages}
 \usepackage{xcolor}
 \usepackage{balance}
@@ -28,7 +33,7 @@ headsepline, % Uncomment to get a line under the header
 \usepackage{alltt} % for code snippet
 \usepackage{listings}
 \usepackage{hyperref}
-\usepackage{amsmath}
+\usepackage{amsmath,amsthm}
 \usepackage{macros}
 \usepackage{mathtools}
 \usepackage{optidef}
@@ -37,6 +42,16 @@ headsepline, % Uncomment to get a line under the header
 \usepackage{polski}
 \usepackage{tikz-cd}
 \usepackage{flowchart}
+\usepackage{tabularx}
+\usepackage{enumitem}
+% % Reduce spacing in toc
+% \usepackage[titles]{tocloft}
+% \setlength{\cftbeforechapskip}{5pt}
+% Reduce spacing around section headers
+\usepackage{titlesec}
+\titlespacing*{\section}{0pt}{0pt}{5pt}
+\titlespacing*{\subsection}{0pt}{2pt}{4pt}
+\counterwithout{footnote}{chapter}
 \usetikzlibrary{
   shapes,
   arrows.meta, % supersedes arrows
@@ -45,8 +60,10 @@ headsepline, % Uncomment to get a line under the header
   line/.style={draw, -Latex}
 }
 \tikzstyle{arrow} = [thick,->,>=stealth]
-\usepackage[backend=bibtex,style=authoryear,natbib=true]{biblatex} % Use the bibtex backend with the authoryear citation style (which resembles APA)
-%\usepackage[backend=bibtex,style=authoryear,natbib=true,backref=true]{biblatex} % use this line instead of the previous one if you want to use back references
+% \usepackage[square,numbers]{natbib}
+% \bibliographystyle{abbrvnat}
+\usepackage[backend=bibtex,style=numeric-comp,natbib=true,sortcites=true]{biblatex}
+\usepackage[backend=bibtex,style=authoryear,natbib=true,backref=true]{biblatex} % use this line instead of the previous one if you want to use back references
 
 \addbibresource{biblio.bib} % The filename of the bibliography
 
@@ -59,8 +76,8 @@ headsepline, % Uncomment to get a line under the header
 
 \geometry{
 	paper=a4paper, % Change to letterpaper for US letter
-	inner=4.0cm, % Inner margin
-	outer=3.0cm, % Outer margin
+	inner=4cm, % Inner margin
+	outer=2.5cm, % Outer margin
 	bindingoffset=.5cm, % Binding offset
 	top=2.5cm, % Top margin
 	bottom=2.5cm, % Bottom margin
@@ -72,7 +89,7 @@ headsepline, % Uncomment to get a line under the header
 %	THESIS INFORMATION
 %----------------------------------------------------------------------------------------
 
-\thesistitle{Manifold Structure of High-Dimensional Data in\\ Artificial and Biological  Neural Networks} % Your thesis title, this is used in the title and abstract, print it elsewhere with \ttitle
+\thesistitle{Manifold Structure of Artificial and Biological Neural Networks} % Your thesis title, this is used in the title and abstract, print it elsewhere with \ttitle
 \supervisor{Dr/Pr. FirstName \textsc{LastName}} % Your supervisor's name, this is used in the title page, print it elsewhere with \supname
 \examiner{Dr/Pr. FirstName \textsc{LastName}} % Your examiner's name, this is not currently used anywhere in the template, print it elsewhere with \examname
 \degree{B.Sc (Hons)} % Your degree name, this is used in the title page and abstract, print it elsewhere with \degreename
@@ -80,7 +97,7 @@ headsepline, % Uncomment to get a line under the header
 \addresses{} % Your address, this is not currently used anywhere in the template, print it elsewhere with \addressname
 
 \subject{Mathematical, Computational and Statistical Sciences} % Your subject area, this is not currently used anywhere in the template, print it elsewhere with \subjectname
-\keywords{Manifold Learning, recurrent neural networks, computational vision, harmonic analysis} % Keywords for your thesis, this is not currently used anywhere in the template, print it elsewhere with \keywordnames
+\keywords{manifold learning, neural computation, early primate vision, computer vision} % Keywords for your thesis, this is not currently used anywhere in the template, print it elsewhere with \keywordnames
 \university{\href{https://www.yale-nus.edu.sg/}{Yale-NUS College}} % Your university's name and URL, this is used in the title page and abstract, print it elsewhere with \univname
 \department{{}} % Your department's name and URL, this is used in the title page and abstract, print it elsewhere with \deptname
 \group{{}} % Your research group's name and URL, this is used in the title page, print it elsewhere with \groupname
@@ -92,6 +109,9 @@ headsepline, % Uncomment to get a line under the header
 \hypersetup{pdfauthor=\authorname} % Set the PDF's author to your name
 \hypersetup{pdfkeywords=\keywordnames} % Set the PDF's keywords to your keywords
 \hypersetup{hypertexnames=true}
+
+\setlength\abovedisplayskip{0pt}
+\setlength\belowdisplayskip{0pt}
 }
 
 
@@ -102,86 +122,84 @@ headsepline, % Uncomment to get a line under the header
 
 \begin{document}
 
-\frontmatter % Use roman page numbering style (i, ii, iii, iv...) for the pre-content pages
+\frontmatter
 
 \pagestyle{plain} 
 
 \begin{titlepage}
-\includepdf[pages=-,pagecommand={},width=\textwidth]{capstone_titlepage.pdf}
-
+\includepdf[noautoscale=true]{capstone_titlepage.pdf}
 \end{titlepage}
 
-\includepdf[pages=-,pagecommand={},width=\textwidth]{declaration.pdf}
+% \begin{abstract}
+% \addchaptertocentry{\abstractname}
+% \newpage 
+% \centerline{\Huge Abstract}
+\chapter{Abstract}
+\textbf{Keywords: \keywordnames}
 
-\begin{acknowledgements}
-\addchaptertocentry{\acknowledgementname} % Add the acknowledgements to the table of contents
-    I would like to thank my supervisor Prof.~Francesca Spagnuolo  and co-supervisor and mentor Prof.~Steven W. Zucker and Dr.~Luciano Dyballa for their generous guidance and advice. They have made possible the many serendipitous moments in this project.  There have been ups and downs in this project, but their support has helped me keep a keen spirit for learning and discovery. 
-    
-    I am also grateful for my family and friends who have been patiently bearing with my endless sharing of my work and ideas. 
-\end{acknowledgements}
+Our work builds on a long line of research aiming to develop more accurate computational models of the visual system. Despite decades of research, we have not fully understood the structure of neural circuits responsible for visual perception \cite{Gwilliams221630}. Additionally, among the computer vision (CV) community, there is a growing interest in investigating the limitations of the CV models by comparing them against biological vision. To this end, we seek to answer two specific open questions: First, how do CV models (VGG16 \cite{vgg16_simonyan_very_2015}, Vision Transformer \cite{vit_dosovitskiy_image_2021}, and Convolutional Recurrent Neural Network \cite{convrnn_shi_end--end_2015}) compare to biological vision, at retina and primary visual cortex (V1), in terms of their respective neural circuits\footnote{A neural circuit is a population of neurons interconnected by synapses to carry out a specific function when activated \cite{gerhard_neuroscience_2013}.}? Second, what specific mechanisms are important in causing such differences and/or similarities?
 
-\begin{abstract}
-\addchaptertocentry{\abstractname} % Add the abstract to the table of contents
-\textbf{Key words: \keywordnames}
+We first build the biological neural tensors using experimental neural spiking data and artificial neural tensors using numerical simulations on computer vision models (VGG16 \cite{vgg16_simonyan_very_2015}, Vision Transformer \cite{vit_dosovitskiy_image_2021}, and Convolutional Recurrent Neural Network \cite{convrnn_shi_end--end_2015}).
+Using tensor CP decomposition, we obtain a manifold of neurons. The discrete data graph underlying the manifold then reflects both the neural circuit connections and the neurons' role in those circuits. By comparing the manifold structure of neurobiological networks in retina and V1 with that of computer vision models, we can make precise inferences about similarities and differences in their respective functional circuits. For the first time, we find that the underlying neural circuit of feed-forward computer vision models including CNN and ViT form disconnected network clusters, making them poor approximations of the visual cortex, contrary to popular belief. In order to model the highly connected neural circuits in the visual cortex, recurrent structure is likely necessary.
 
-This work builds on a long line of research aiming to develop more accurate mathematical and computational models of the visual system. It has recently been shown that feed-forward neural networks turn out to be inaccurate models for the neurobiological networks in the visual cortex. We focused on a related question that has not been investigated: how is the structure of recurrent and transformer neural networks related to that of neurobiological networks (in the mouse visual cortex)?
+% \end{abstract}
 
-We first build the biological and artificial neuron tensors using experimental neural spiking data and numerical simulations on recurrent and transformer neural networks. Using tensor component analysis, we discover which groups of neurons respond similarly to which stimuli input. Since these groups are likely not independent, we use the non-linear dimensionality reduction method, diffusion maps, to infer a manifold of neurons. This manifold structure implies a functional network (represented by the discrete data graph underlying the continuous manifold) and thus reflects both the neural circuit connections and the neuron’s role in those circuits. Comparing the manifold structures of biological and artificial neural networks allows us to make precise inferences about similarities and differences in their respective functional circuits. 
-
-\end{abstract}
-
-
+% Since these groups are likely not independent, we use the non-linear dimensionality reduction method, diffusion maps, to infer a manifold of neurons.
+% (represented by the discrete data graph underlying the continuous manifold) 
+% groups  respond similarly to which stimuli input
 %----------------------------------------------------------------------------------------
 % CONTRIBUTIONS
 %----------------------------------------------------------------------------------------
 
-% \chapter{Claims}
-%
-% This paper presents the following original contributions:
-%
-% \begin{enumerate}
-% 	\item A hardware device for haptic sensory substitution along with designs for the construction of such a system.
-% 	\item Two implementations of sensory substitution using haptic feedback, continuous and delayed feedback-based spatial navigation tasks, each of which include:
-% 		\begin{enumerate}
-% 			\item a front-end for providing visual input to the user during the training phase with useful readouts to the researcher,
-% 			\item a transmission protocol, which maps information from the task at hand (spatial coordinates, velocity information, etc) to time-based sensor actuation signals (20$^{\circ}$ on servo 1, 35$^{\circ}$ on servo 2, etc) in real-time.
-% 		\end{enumerate}
-% 	\item An evaluation framework for measuring the performance of a sensory substitution system, which provides sample tasks that can be used to standardise and compare performance across the board for future research.
-% 	\item A review of existing hardware and software stacks as well as possible avenues for development based on the developed metrics.
-% \end{enumerate}
-%
+%https://ijast.org/credit-author-statement/
+
 % In addition, code for displaying results in real-time, modules for managing servo overload, network latency and other factors were also written by the author.
 
-%----------------------------------------------------------------------------------------
-%	QUOTATION PAGE
-%----------------------------------------------------------------------------------------
+% Reduce spacing in TOC
 
-% \vspace*{0.2\textheight}
-%
-% \noindent\enquote{\itshape Thanks to my solid academic training, today I can write hundreds of words on virtually any topic without possessing a shred of information, which is how I got a good job in journalism.}\bigbreak
-%
-% \hfill Dave Barry
+\begin{onehalfspacing}
+\setcounter{tocdepth}{0}
+\tableofcontents 
+\end{onehalfspacing}
 
-\tableofcontents
+
 
 \mainmatter 
 \pagestyle{thesis}
 
-
-\input{chapters/chapter1-intro}
-\input{chapters/chapter2-outline}
-\input{chapters/chapter3-linear}
-\input{chapters/chapter4-nonlinear}
-\input{chapters/chapter5-biological}
-\input{chapters/chapter6-artifical}
-\input{chapters/chapter7-topology}
-\input{chapters/chapter8-conclusion}
-% \input{chapters/my-research-overview}
-
-
-\printbibliography[heading=bibintoc]
+\input{chapters/chapter-intro}
+\input{chapters/chapter-neuro}
+\input{chapters/chapter-linear}
+\input{chapters/chapter-biological}
+\input{chapters/chapter-artificial}
+\input{chapters/chapter-conclusion}
 
 \appendix 
- \input{appendix/appendixA}
 
+
+\renewcommand*{\bibfont}{\footnotesize}
+\setlength\bibitemsep{0pt}
+\begin{singlespacing}% \printbibliography[heading=bibintoc]
+% \bibliography{biblio}[title=Bibliography (Main)]
+\printbibliography[title=Bibliography (Main), heading=bibintoc, keyword=main]
+\printbibliography[title=Bibliography (Supplementary), heading=bibintoc, notkeyword=main]
+\end{singlespacing}
+
+
+\input{appendix/appendix-quote}
+\includepdf[pages=-,pagecommand={},width=\textwidth]{declaration.pdf}
+\begin{acknowledgements}
+\addchaptertocentry{\acknowledgementname} 
+    I would like to thank my supervisor Francesca Spagnuolo  and co-supervisor and mentor Steven W.~Zucker and Luciano Dyballa for their generous guidance and advice. They have made possible the many serendipitous moments in this project. There have been ups and downs in this project, but their support has helped me keep a keen spirit for learning and discovery. To the faculty at Yale-NUS for nurturing me into a good human being, and for bearing with my countless weaknesses and mistakes, particularly the MCS faculty who have had paramount influence in my development as a researcher: Prof.~Francesca Spagnuolo, Prof.~Olivier Danvy, Prof.~David Smith, Prof.~Robby Tan, and  Prof.~Timothy Wertz. Remarkably, they somehow believed in me even in times when I myself did not and provided me with the right guidance. To my family, thank you for loving me for who I am. To my suitemates, friends, and alumni, thank you for patiently bearing with my endless sharing of my work and ideas. Specifically, I acknowledge Xiyao Fu, Aparna Gupte, Mark Yuen for providing feedback; almuni Abhinav Natarajan, Dion Ho, Sultan Aitzhan, Yiming Ng, Wei Han, Xin Run for supporting me throughout my college years; friends whom I have had conversations with about this capstone: Amanda Leong, Zhala Sarmast, Amberly Yeo, Glenda Chin, Dasha Haryfullina, Aiman Imtiaz, Lize Cai, Yanhua Wang, Linda Li, Jia Tang, Eric Lan, \dots To the trees on campus, thank you for being there and reminding me of the life force within me. To whoever has read thus far, it's my pleasure to take you on this short tour with me. I have flaws, and my thesis has flaws - I sincerely invite more conversations about them. 
+    %  
+\end{acknowledgements}
+
+\input{appendix/appendix-all-experiments}
+\input{appendix/appendix-lists}
+\input{appendix/appendix-diffmap}
+\input{appendix/appendix-pca}
+\input{appendix/appendix-face-results}
+\input{appendix/appendix-tda}
+\input{appendix/appendix-tda-results}
+% \input{appendix/appendix-code}
 \end{document}
