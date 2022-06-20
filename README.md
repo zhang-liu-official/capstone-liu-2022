@@ -1,16 +1,13 @@
 # Capstone Liu 2022
 
-**Manifold Structure of High-Dimensional Data from Biological and Artificial Neural Networks**
+**Manifold Structure of Artificial and Biological Neural Networks**
 
-*Key words: manifold learning, recurrent neural networks, computational vision, neural data analysis, harmonic analysis*
+*Key words: manifold learning, neural computation, early primate vision, computational vision*
 
-## Proposal:
+## Abstract:
+Our work builds on a long line of research aiming to develop more accurate computational models of the visual system. Despite decades of research, we have not fully understood the structure of neural circuits responsible for visual perception. Additionally, among the computer vision (CV) community, there is a growing interest in investigating the limitations of the CV models by comparing them against biological vision. To this end, we seek to answer two specific open questions: First, how do CV models (VGG16, Vision Transformer, and Convolutional Recurrent Neural Network) compare to biological vision, at retina and primary visual cortex (V1), in terms of their respective neural circuits1? Second, what specific mechanisms are important in causing such differences and/or similarities?
 
-This capstone project builds on a long line of research aiming to develop more accurate mathematical and computational models of early vision in the primary visual cortex (V1). It has recently been shown that the common feed-forward neural networks popularized by the success of deep learning turn out to be far from the neurobiological networks in V1. However, a question that has not been investigated is how the structure of recurrent and transformer neural networks relates to that of neurobiological networks. A preliminary hypothesis is that the structure of the recurrent and transformer neural networks are not accurate models of the visual system either, which we would like to verify in this project. 
-
-To this end, the main approach of this project is to infer manifolds of neurons (either biological or artificial) in which neurons that respond similarly to an ensemble of stimuli are defined to be closer to each other. This manifold structure implies a functional network (the discrete data graph underlying the continuous manifold) and thus reflects both the neural circuit connections and the neuron’s role in those circuits. One of the key challenges in discovering the underlying manifold structure is the high-dimensionality of the neural data. It is thus necessary to apply both linear and non-linear dimensionality reduction methods, including tensor factorization and diffusion maps. 
-
-The significance of this project is threefold. A first and more immediate contribution would be novel findings regarding whether recurrent models are accurate representations of V1. In a broader view, successful completion of this project can push the frontier of the field with a step closer towards better models of early vision, potentially offering insights for reverse-engineering new computer vision algorithms. Last but not least, the techniques used in this project are applicable to any high-dimensional data, which are prevalent in numerous areas beyond the sciences.
+We first build the biological neural tensors using experimental neural spiking data and artificial neural tensors using numerical simulations on computer vision models (VGG16, Vision Transformer, and Convolutional Recurrent Neural Network). Using tensor CP decomposition, we obtain a manifold of neurons. The discrete data graph underlying the manifold then reflects both the neural circuit connections and the neurons’ role in those circuits. By comparing the manifold structure of neurobiological networks in retina and V1 with that of computer vision models, we can make precise inferences about similarities and differences in their respective functional circuits. For the first time, we find that the underlying neural circuit of feed-forward computer vision models including CNN and ViT form disconnected network clusters, making them poor approximations of the visual cortex, contrary to popular belief. In order to model the highly connected neural circuits in the visual cortex, recurrent structure is likely necessary.
 
 
 ## Milestones:
@@ -45,17 +42,3 @@ Milestones for semester 2: (to be reviewed and planned in greater details after 
     (3) study the theory in greater depth to improve the current methodology
 5. Finish report
 6. Finish presentation
-
-
-Resources:
-
-1. On tensor factorization:
-1) Matrix/tensor factorization, by the first author of the paper you've read:
-https://www.youtube.com/watch?v=hmmnRF66hOA [Part 1 - matrices]
-https://www.youtube.com/watch?v=O-YTsSuEFiM [Part 2 - tensors]
-
-2) A talk on generalized CP decomp. and applications, by Tamara Kolda:
-https://www.youtube.com/watch?v=L8uT6hgMt00
-
-3) This one is more math-oriented; feel free to focus only on the first 18 min:
-https://www.youtube.com/watch?v=HcIN27_WqPU
